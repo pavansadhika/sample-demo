@@ -1,0 +1,30 @@
+-------------------------------------------------------------------------------
+Test set: TestSuite
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 2, Errors: 0, Skipped: 4, Time elapsed: 6.771 s <<< FAILURE! - in TestSuite
+InitializeBrowser(com.ea.seleniumdemo.MainPageTest2)  Time elapsed: 6.244 s  <<< FAILURE!
+org.openqa.selenium.SessionNotCreatedException: 
+Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.
+Build info: version: '4.1.4', revision: '535d840ee2'
+System info: host: 'ip-172-31-50-71', ip: '172.31.50.71', os.name: 'Linux', os.arch: 'amd64', os.version: '5.15.0-1030-aws', java.version: '17.0.5'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Command: [null, newSession {capabilities=[Capabilities {browserName: chrome, goog:chromeOptions: {args: [--disable-dev-shm-usage], extensions: []}}], desiredCapabilities=Capabilities {browserName: chrome, goog:chromeOptions: {args: [--disable-dev-shm-usage], extensions: []}}}]
+Capabilities {}
+Caused by: java.io.UncheckedIOException: java.net.ConnectException: Connection refused: localhost/127.0.0.1:4444
+Caused by: java.net.ConnectException: Connection refused: localhost/127.0.0.1:4444
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/127.0.0.1:4444
+Caused by: java.net.ConnectException: Connection refused
+
+InitializeBrowser(com.ea.seleniumdemo.MainPageTest)  Time elapsed: 6.255 s  <<< FAILURE!
+org.openqa.selenium.SessionNotCreatedException: 
+Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.
+Build info: version: '4.1.4', revision: '535d840ee2'
+System info: host: 'ip-172-31-50-71', ip: '172.31.50.71', os.name: 'Linux', os.arch: 'amd64', os.version: '5.15.0-1030-aws', java.version: '17.0.5'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Command: [null, newSession {capabilities=[Capabilities {browserName: chrome, goog:chromeOptions: {args: [--disable-dev-shm-usage], extensions: []}}], desiredCapabilities=Capabilities {browserName: chrome, goog:chromeOptions: {args: [--disable-dev-shm-usage], extensions: []}}}]
+Capabilities {}
+Caused by: java.io.UncheckedIOException: java.net.ConnectException: Connection refused: localhost/127.0.0.1:4444
+Caused by: java.net.ConnectException: Connection refused: localhost/127.0.0.1:4444
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/127.0.0.1:4444
+Caused by: java.net.ConnectException: Connection refused
+
