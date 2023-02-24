@@ -39,18 +39,13 @@ jobs:
       # Dependency Check(SCA)
       - name: Run dependency check
         run: mvn org.owasp:dependency-check-maven:check
-     # Upload Dependency check report
-      - name: OWASP Dependency Check
-        uses: dependency-check/dependency-check-action@v3
-        with:
-         format: 'HTML'
-         output-directory: './reports/dependency-check'
-         scan-directory: './src'
-      - name: Upload Dependency Check report artifacts
+      
+      # Upload Dependency check report
+      - name: Upload results
         uses: actions/upload-artifact@v2
         with:
-          name: dependency-check
-          path: ./reports/dependency-check
+          name: dependency-check-report
+          path: ./target/dependency-check-report.html
      # Junit Testing
       - name: Build and Test
         run: mvn test
