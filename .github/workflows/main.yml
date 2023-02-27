@@ -138,8 +138,8 @@ jobs:
       - name: upload all test files
         uses: actions/upload-artifact@v2
         with:
-         name: selenium-results
-         path: ./*
+         name: selenium-test-results
+         path: ./SeleniumGridExecution/target/surefire-reports/Suite/*
   #Deployment in Staging Environment
   Deploy_Staging_Environment:
     #needs: Selenium-test
