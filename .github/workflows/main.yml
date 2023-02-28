@@ -23,12 +23,15 @@ jobs:
           cache: maven
       - name: Maven Build 
         run: mvn clean package
-      # upload artifacts
+      # Generate artifacts
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: petclinic
           path: ./target/*.war
+  Sonar:
+    runs-on: ubuntu-latest
+    steps:
       # SOnarQube Code Scan and analysis
       - name: SonarQube-Scan Stage
         uses: sonarsource/sonarqube-scan-action@master
@@ -42,6 +45,9 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SCA:
+    runs-on: ubuntu-latest
+    steps:
       # OWASP Dependency Check(SCA)
       - name: Run dependency check
         run: mvn org.owasp:dependency-check-maven:check
@@ -52,6 +58,9 @@ jobs:
         with:
           name: dependency-check-report
           path: ./target/dependency-check-report.html
+  Junit:
+    runs-on: ubuntu-latest
+    steps:
       # Junit Testing
       - name: Build and Test
         run: mvn test
@@ -60,6 +69,9 @@ jobs:
         with:
          name: junit-reports
          path: ./target/surefire-reports/*
+  CodeCoverage:
+    runs-on: ubuntu-latest
+    steps:
       # Code Coverage
       - name: Generate JaCoCo report
         run: mvn clean test jacoco:report
@@ -68,6 +80,9 @@ jobs:
         with:
          name: codecoverage-jacoco-report
          path: ./target/site/jacoco/index.html 
+  Docker-Image:
+    runs-on: ubuntu-latest
+    steps:
       # Build before creating docker image
       - name: Build before create image
         run: mvn clean package
@@ -81,6 +96,9 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+  Image-Scan:
+    runs-on: ubuntu-latest
+    steps:
       # Docker Image Scan Trivy Tool installing
       - name: Install Trivy 
         run: |
@@ -98,88 +116,3 @@ jobs:
            name: trivy-scan-results
            path: ./*.html
  
-  TestStage:
-     runs-on: ubuntu-latest
-     steps:
-       - name: TEstStage
-         run: echo "welcome to github pipeline"
-    
-  Deploy_QA_Environment:
-    needs: Build
-    runs-on: self-hosted
-    steps:
-      - name: Deploy image into docker
-        run: |
-          sudo docker pull pavan9999/github-actions:petclinic
-          sudo docker run -tdi --name p1 -p 8080:8080 pavan9999/github-actions:petclinic
-
-  Selenium-test:
-     needs: Deploy_QA_Environment
-     runs-on: ubuntu-latest
-     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-      - name: build artifacts
-        run: mvn clean package
-      - name:  Install Google Chrome # Using shell script to install Google Chrome
-        run: |
-           chmod +x ./SeleniumGridExecution/scripts/InstallChrome.sh
-           ./SeleniumGridExecution/scripts/InstallChrome.sh 
-      - name: Build with Maven
-        run: |
-           cd SeleniumGridExecution
-           mvn test
-      - name: upload all test files
-        uses: actions/upload-artifact@v2
-        with:
-         name: selenium-test-results
-         path: ./SeleniumGridExecution/target/surefire-reports/Suite/*
-  #Deployment in Staging Environment
-  Deploy_Staging_Environment:
-    needs: Selenium-test
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
-    - name: Deploy to Amazon ECS
-      run: |
-        aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{env.ECS_SERVICE}} --task-definition ${{ env.ECS_TASK_DEFINITION }}
- 
- #Jmeter Testing for load and performance 
-  Performance_Testing:
-    needs: Deploy_Staging_Environment 
-    runs-on: ubuntu-latest
-    steps:
-     - name: Checkout code
-       uses: actions/checkout@v2
-     - name: Setup Java
-       uses: actions/setup-java@v1
-       with:
-          java-version: 11
-     - name: Download and extract JMeter
-       run: |
-         curl -L https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.5.zip -o jmeter.zip
-         unzip jmeter.zip
-
-     - name: Run JMeter test
-       run: |
-         ./apache-jmeter-5.5/bin/jmeter -n -t test.jmx -l result.jtl
-
-     - name: Upload test results    
-       uses: actions/upload-artifact@v2
-       with:
-          name: jmeter-test-results
-          path: ./target/*.jtl
-    
