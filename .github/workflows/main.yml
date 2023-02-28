@@ -7,9 +7,9 @@ env:
    IMAGE_NAME: pavan9999/github-actions
    IMAGE_TAG: MoonPageApp
    AWS_REGION: us-east-1
-   ECS_CLUSTER: ECS-Cluster
-   ECS_SERVICE: github-svc
-   ECS_TASK_DEFINITION: github-task
+   ECS_CLUSTER: ecs-cluster
+   ECS_SERVICE: service
+   ECS_TASK_DEFINITION: task
 jobs:
   Build:
     runs-on: ubuntu-latest
