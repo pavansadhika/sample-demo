@@ -5,11 +5,11 @@ env:
    ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
    ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
    IMAGE_NAME: pavan9999/github-actions
-   IMAGE_TAG: moonpage
+   IMAGE_TAG: petclinic
    AWS_REGION: us-east-1
    ECS_CLUSTER: ecs-cluster
-   ECS_SERVICE: service
-   ECS_TASK_DEFINITION: task
+   ECS_SERVICE: svc
+   ECS_TASK_DEFINITION: taskdefinition
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: MoonPageApp
+          name: petclinic
           path: ./target/*.war
       # SOnarQube Code Scan and analysis
       - name: SonarQube-Scan Stage
@@ -101,19 +101,22 @@ jobs:
     #needs: Build
     runs-on: self-hosted
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: '17'
-      - name: Build JAR
-        run: mvn clean package
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-app
-          path: ./target/*.jar 
+      - name: Deploy image into docker
+        run: |
+          sudo docker pull pavan9999/github-actions:petclinic
+          sudo docker run -tdi --name p1 -p 8080:8080 pavan9999/github-actions:petclinic
+      - name: Deployment verification
+        run: 
+            sudo sleep 30
+            sudo curl http://44.202.191.239:8080/
+      - name: Check verification result
+        if: ${{ success() }}
+        run: sudo echo "Deployment verification passed."
+      
+      - name: Fail on verification failure
+        if: ${{ failure() }}
+        run: sudo exit 1
+
   Selenium-test:
      #needs: Build
      runs-on: ubuntu-latest
