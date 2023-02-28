@@ -111,8 +111,7 @@ jobs:
             sudo curl http://44.202.191.239:8080/
       - name: Check verification result
         if: ${{ success() }}
-        run: sudo echo "Deployment verification passed."
-      
+        run: sudo echo "Deployment verification passed."   
       - name: Fail on verification failure
         if: ${{ failure() }}
         run: sudo exit 1
