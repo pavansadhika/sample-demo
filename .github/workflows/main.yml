@@ -97,6 +97,13 @@ jobs:
         with:
            name: trivy-scan-results
            path: ./*.html
+ 
+  TestStage:
+     runs-on: ubuntu-latest
+     steps:
+       - name: TEstStage
+         run: echo "welcome to github pipeline"
+    
   Deploy_QA_Environment:
     needs: Build
     runs-on: self-hosted
