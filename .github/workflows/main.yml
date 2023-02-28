@@ -103,8 +103,6 @@ jobs:
     steps:
       - name: Deploy image into docker
         run: |
-          sudo docker rm -f $(docker ps -aq)
-          sudo docker rmi -f $(docker images)
           sudo docker pull pavan9999/github-actions:petclinic
           sudo docker run -tdi --name p1 -p 8080:8080 pavan9999/github-actions:petclinic
 
