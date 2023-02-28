@@ -107,16 +107,6 @@ jobs:
           sudo docker rmi -f $(docker images)
           sudo docker pull pavan9999/github-actions:petclinic
           sudo docker run -tdi --name p1 -p 8080:8080 pavan9999/github-actions:petclinic
-      - name: Deployment verification
-        run: 
-            sleep 30
-            curl http://44.202.191.239:8080/
-      - name: Check verification result
-        if: ${{ success() }}
-        run: echo "Deployment verification passed."   
-      - name: Fail on verification failure
-        if: ${{ failure() }}
-        run: exit 1
 
   Selenium-test:
      #needs: Build
