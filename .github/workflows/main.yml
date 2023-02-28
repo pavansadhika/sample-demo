@@ -103,18 +103,20 @@ jobs:
     steps:
       - name: Deploy image into docker
         run: |
+          sudo docker rm -f $(docker ps -aq)
+          sudo docker rmi -f $(docker images)
           sudo docker pull pavan9999/github-actions:petclinic
           sudo docker run -tdi --name p1 -p 8080:8080 pavan9999/github-actions:petclinic
       - name: Deployment verification
         run: 
-            sudo sleep 30
-            sudo curl http://44.202.191.239:8080/
+            sleep 30
+            curl http://44.202.191.239:8080/
       - name: Check verification result
         if: ${{ success() }}
-        run: sudo echo "Deployment verification passed."   
+        run: echo "Deployment verification passed."   
       - name: Fail on verification failure
         if: ${{ failure() }}
-        run: sudo exit 1
+        run: exit 1
 
   Selenium-test:
      #needs: Build
