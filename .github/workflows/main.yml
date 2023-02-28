@@ -5,7 +5,7 @@ env:
    ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
    ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
    IMAGE_NAME: pavan9999/github-actions
-   IMAGE_TAG: MoonPageApp
+   IMAGE_TAG: moonpage
    AWS_REGION: us-east-1
    ECS_CLUSTER: ecs-cluster
    ECS_SERVICE: service
