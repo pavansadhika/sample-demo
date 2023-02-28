@@ -98,7 +98,7 @@ jobs:
            name: trivy-scan-results
            path: ./*.html
   Deploy_QA_Environment:
-    #needs: Build
+    needs: Build
     runs-on: self-hosted
     steps:
       - name: Deploy image into docker
@@ -107,7 +107,7 @@ jobs:
           sudo docker run -tdi --name p1 -p 8080:8080 pavan9999/github-actions:petclinic
 
   Selenium-test:
-     #needs: Build
+     needs: Deploy_QA_Environment
      runs-on: ubuntu-latest
      steps:
       - uses: actions/checkout@v3
@@ -134,7 +134,7 @@ jobs:
          path: ./SeleniumGridExecution/target/surefire-reports/Suite/*
   #Deployment in Staging Environment
   Deploy_Staging_Environment:
-    #needs: Selenium-test
+    needs: Selenium-test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -152,7 +152,7 @@ jobs:
  
  #Jmeter Testing for load and performance 
   Performance_Testing:
-    #needs: Deploy_Staging_Environment 
+    needs: Deploy_Staging_Environment 
     runs-on: ubuntu-latest
     steps:
      - name: Checkout code
